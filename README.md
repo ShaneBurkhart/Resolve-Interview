@@ -1,3 +1,5 @@
+**Note:** Please do not fork this repository. Just clone it.
+
 # Overview
 
 This purpose of this exercise is to recreate part of a service we currently have in our production systems. It is to help you get your hands dirty with tasks we've had to tackle before (in a reasonable amount of take-home time) and it is for us to understand your ability to bring requirements to life with code.
