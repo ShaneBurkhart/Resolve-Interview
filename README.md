@@ -7,7 +7,7 @@ This purpose of this exercise is to recreate part of a service we currently have
 
 # Background
 
-The data that Resolve ingests is Building Information Modeling data, or BIM for short. What makes it different than a standard 3D model is that in addition to having vertex, triangle, material, etc. data to visually represent the building it also has useful metadata about the building components. This helps lets you do things like identify doors and walls, understand how much structural load a beam can withstand, or how much electricity you can run through conduit. It allows our customers to walk up to elements in VR and then better understand what they're looking at.
+The data that Resolve ingests is Building Information Modeling data, or BIM for short. What makes it different than a standard 3D model is that in addition to having vertex, triangle, material, etc. data to visually represent the building it also has useful metadata about the building components. This lets you do things like identify doors and walls, understand how much structural load a beam can withstand, or how much electricity you can run through conduit. It allows our customers to walk up to elements in VR and then better understand what they're looking at.
 
 The image below shows the *Properties* menu in our VR app. It allows you to select an object and query for it's metadata. The data associated with properties can be quite large (gigabytes for the large projects that are common on the platform) so we fetch properties at runtime from a server instead of making the user wait for a gigabyte sized download.
 
