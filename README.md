@@ -17,7 +17,7 @@ Getting this feature to work in our app has a lot of moving parts and we'd like 
 
 # Objectives
 
-You will build a service and client which retrieves the data when necessary and displays it in a human readable way. Once complete please share a video of your working implementation + your code for us to review. Spend as much or as little time on this exercise as you'd like. We only ask you return it 48 hours from it was sent to you.
+You will build a service and client which retrieves the data when necessary and displays it in a human readable way. Once complete please share a video of your working implementation + your code for us to review. Spend as much or as little time on this exercise as you'd like. We only ask you return it 48 hours from when it was sent to you.
 
 What you need to do:
 
