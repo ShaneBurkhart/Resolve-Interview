@@ -21,28 +21,28 @@ You will build a service and client which retrieves the data when necessary and 
 
 What you need to do:
 
-1. Build a service that returns property data for a specific object id - It needs to download the SQLite file, accept requests with specific object id's, and return the data for requested objects. *Why download it instead of just having it hosted in this repo?* We fetch files like this for **every** model because they're unique and come from 3rd party sources. So we want to see how you'd tackle this. The file is hosted on AWS here: https://resolve-dev-public.s3.amazonaws.com/sample-data/interview/props.db 
-2. Build a client that requests and displays property data from #1 - you have creative freedom here. this can be a simple web page, a CLI, a Unity app, or anything else that gets the job done. The most important requirement is that it displays the data in a format similar to the image above (not in 3D) - the name of the selected element should be explicitly stated and properties should be grouped by category. This should not be part of the same process running the code in #1. We want to see how you make things talk to each other.
+1. Build a javascript API service that returns property data for a specific entity id. The API queries the SQLite file below to get info about the provided entity id. When a request comes in it should check if the SQLite file is already locally stored and if it isn't it needs to download the SQLite file, then query against it. The API accepts requests with specific entity id's and return the data for requested entities. *Why download the file it instead of just having it hosted in this repo?* We fetch files like this for **every** model because they're unique and come from 3rd party sources. So we want to see how you'd tackle this. The file is hosted on AWS here: https://resolve-dev-public.s3.amazonaws.com/sample-data/interview/props.db 
+2. Build a client that requests and displays property data from #1. The client should be a React app that accepts an entity id as input, sends a request to the service, and displays the resulting properties in a way the user can explore. The most important requirement is that it displays the data in a format similar to the image above (not in 3D) - the name of the selected element should be explicitly stated and properties should be grouped by category. This should not be part of the same app/process running the code in #1. We want to see how you make things talk to each other.
 3. Provide a video demo of your code working and a link to the code for us to review.
 
-Please complete as much or as little of the project as you'd like. You have freedom to implement the service for retrieving the data and client for fetching and displaying the data using whatever frameworks and languages you'd like. We'll use your implementation as a basis for discussion at a later date so keep track of any ideas, bugs, or deficiencies we can discuss together.
+Please complete as much or as little of the project as you'd like. You have freedom to implement the service for retrieving the data and client for fetching and displaying the data using whatever javascript frameworks you prefer. We'll use your implementation as a basis for discussion at a later date so keep track of any ideas, bugs, or deficiencies we can discuss together.
 
 ## About the data
 
-The SQLite file stores object properties using an Entity Attribute Value (EAV) model. 
+The SQLite file stores properties using an Entity Attribute Value (EAV) model. 
 
-The `entity_id` corresponds to the object id that your client would be requesting. 
+The `entity_id` corresponds to the id that your client would be requesting. 
 
 You can assume properties are grouped by *category* and that categories prefixed with `__` should not be shown to the user.
 
 ## Example
 
-The object id `7600` corresponds to the object **Transformer1 [338678]**.
+The entity id `7600` corresponds to the object **Transformer1 [338678]**.
 
 The JSON formatted version of these properties could look something like this (it's truncated):
 ```
 {
-    "objectid":7600,
+    "entityId":7600,
     "name":"Transformer1 [338678]",
     "properties":{
         "Constraints":{
@@ -79,11 +79,11 @@ The JSON formatted version of these properties could look something like this (i
 }
 ```
 
-The object id `8862` corresponds to a **Horizontal Bend-Ladder [393403]**.
+The entity id `8862` corresponds to a **Horizontal Bend-Ladder [393403]**.
 
 ```
 {
-    "objectid":8862,
+    "entityId":8862,
     "name":"Horizontal Bend-Ladder [393403]",
     "properties":{
         "Constraints":{
@@ -110,6 +110,7 @@ The object id `8862` corresponds to a **Horizontal Bend-Ladder [393403]**.
 
 If you find yourself wanting more here are some things you can consider for extra credit:
 - Create instructions for how this would be run locally and/or deployed
-- Aggregate property data for the requested object id and all it's parents
+- Aggregate property data for the requested entity id and all it's parents
 - cache results
 - format output based on it's data type and precision
+- how do you handle requests for large DB files that take a long time to download?
