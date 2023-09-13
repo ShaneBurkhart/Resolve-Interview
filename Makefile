@@ -25,6 +25,9 @@ restart:
 logs:
 	docker-compose logs -f
 
+test:
+	docker-compose run --rm next npm run test-watcher
+
 c:
 	docker-compose run --rm next bash
 

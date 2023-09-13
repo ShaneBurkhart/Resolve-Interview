@@ -8,6 +8,7 @@ type Data = {
   name: string
 }
 
+// TODO: add a param for pagination
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
