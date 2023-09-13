@@ -10,18 +10,28 @@ import { query } from '@/lib/db'
 
 
 function buildEntity(attrRows: Array<any>) {
+	if (attrRows.length === 0) throw new Error('No attributes found for entity');
+
 	const entity = {
+		entityId: attrRows[0].entity_id,
+		name: null,
 		properties: {},
 	}
 
 	for (const row of attrRows) {
 		const category = row.category;
+
+		// save the name if we see it
+		if (category === '__name__') {
+			entity.name = row.value;
+			continue;
+		}
+
 		if (!entity.properties[category]) entity.properties[category] = {};
+		console.log(row);
 
 		entity.properties[category][row.display_name] = row.value || " "
 	}
-
-	console.log(entity)
 
 	return entity
 }
@@ -33,10 +43,13 @@ export async function getEntityProperties(db: Database, entityId: number) {
 		JOIN _objects_attr ON _objects_eav.attribute_id = _objects_attr.id
 		JOIN _objects_val ON _objects_eav.value_id = _objects_val.id
 		WHERE _objects_eav.entity_id = ?
-		AND _objects_attr.category NOT LIKE '\\_\\_%' ESCAPE '\\'
+		AND (
+			_objects_attr.category NOT LIKE '\\_\\_%' ESCAPE '\\'
+			OR _objects_attr.category = '__name__'
+		)
 	`;
 	const result = await query(db, q, [entityId]);
-	console.log(result);
+	// todo: handle the no values case
 
 	return buildEntity(result);
 }

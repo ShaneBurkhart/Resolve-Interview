@@ -3,14 +3,18 @@ import { getEntityProperties } from './entity';
 
 const ENTITY_ID = 7600;
 
+
+// todo: it appears that some attributes are missing for 7600 that have blank values
+
 test('entity query returns the correct properties', async () => {
 	const db = await openDB();
 
 	const result = await getEntityProperties(db, ENTITY_ID);
 
-	console.log(result);
-
-	expect(result.length).toBe(2);
+	expect(result.entityId).toBe(ENTITY_ID);
+	expect(result.name).toBe('Transformer1 [338678]')
+	expect(result.properties).toBeDefined();
+	expect(Object.keys(result.properties).length).toBeGreaterThan(0);
 })
 
 test('what are the value types?', async () => {
