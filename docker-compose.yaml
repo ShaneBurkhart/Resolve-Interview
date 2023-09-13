@@ -10,4 +10,13 @@ services:
       - 3000:3000
     volumes:
       - .:/app
+      - ./data:/data
     command: npm run dev
+  
+  sqliteweb:
+    image: tomdesinto/sqliteweb
+    ports:
+      - 8080:8080
+    volumes:
+      - ./data:/data
+    command: /data/props.db

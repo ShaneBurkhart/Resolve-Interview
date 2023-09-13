@@ -1,4 +1,4 @@
-- [] create the dockerfile, next.js, tailwind
+- [x] create the dockerfile, next.js, tailwind
 - [] download sqlite file and successfully create a client
 - [] create the api endpoint
 - [] create the frontend
