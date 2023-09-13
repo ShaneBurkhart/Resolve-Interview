@@ -62,11 +62,22 @@ export default function Home() {
     setLoading(false)
   }
 
+  const deleteDB = async () => {
+    setLoading(true)
+    setEntity(null)
+    const response = await fetch(`/api/delete_db`)
+    const entity = await response.json()
+    setLoading(false)
+  }
+
   console.log(entity)
 
   return (
     <div className='max-w-2xl mx-auto'>
       <h1>Hello World</h1>
+
+      <button onClick={deleteDB}>Delete DB</button>
+
       <div className='pb-8'>
         <h3>Search for an entity</h3>
         <input 
