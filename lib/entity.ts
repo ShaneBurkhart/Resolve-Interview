@@ -30,7 +30,8 @@ function buildEntity(attrRows: Array<any>) {
 		if (!entity.properties[category]) entity.properties[category] = {};
 		console.log(row);
 
-		entity.properties[category][row.display_name] = row.value || " "
+		const key = row.display_name || row.name
+		entity.properties[category][key] = row.value || " "
 	}
 
 	return entity

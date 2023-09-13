@@ -16,6 +16,7 @@ const loadEntity = async (entityId: string) => {
 }
 
 export default function Home() {
+  const [isDownloading, setIsDownloading] = useState(false)
   const [loading, setLoading] = useState(false)
   const [entity, setEntity] = useState(null)
   const [input, setInput] = useState('')
@@ -26,18 +27,42 @@ export default function Home() {
     setInput(onlyNums);
   }
 
+  const startPollingForDownload = (startTime) => {
+    // poll for 30 seconds
+    const interval = setInterval(async () => {
+      const response = await fetch(`/api/is_downloaded`)
+      const entity = await response.json()
+      
+      if (entity.status === "downloaded") {
+        setIsDownloading(false)
+        clearInterval(interval)
+        submit()
+      } else if (new Date().getTime() - startTime.getTime() > 30000) {
+        setIsDownloading(false)
+        clearInterval(interval)
+      }
+    }, 1000)
+  }
+
   const submit = async () => {
     setLoading(true)
+    setEntity(null)
 
     const entityId = input
     const entity = await loadEntity(entityId)
-    setEntity(entity)
+    if (entity.status === "downloading") {
+      setLoading(false)
+      setIsDownloading(true)
+      startPollingForDownload(new Date())
+      return
+    } else {
+      setEntity(entity.entity)
+    }
 
     setLoading(false)
   }
 
-  console.log(input, entity)
-
+  console.log(entity)
 
   return (
     <div className='max-w-2xl mx-auto'>
@@ -51,7 +76,10 @@ export default function Home() {
         />
         <button onClick={submit}>Submit</button>
       </div>
+      {isDownloading && <p>Downloading...</p>}
+      {loading && <p>Loading...</p>}
       {!!entity && <EntityInfo entity={entity} />}
+
     </div>
   )
 }

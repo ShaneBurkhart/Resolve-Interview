@@ -13,3 +13,10 @@
 - [] go through the requirements thoroughly and add missing todos
 - [] consider what needs tested
 - [] create a punch list for the final demo
+
+
+
+when we submit a request, we want to check if the db exists
+- if it doesn't, then we return a response saying we are downloading
+	- poll for the status of the database, then resubmit the request
+- if it does, then we return the entity values

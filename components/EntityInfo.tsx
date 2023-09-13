@@ -12,6 +12,10 @@ export function EntityInfo({ entity }) {
 				return (
 					<div>
 						<h4 className="pt-8">{category}</h4>
+						<span>{JSON.stringify(entity.properties[category])}</span>
+						<br/>
+						<br/>
+
 						{Object.keys(entity.properties[category]).map(prop => {
 							return (
 								<div>
