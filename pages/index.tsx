@@ -52,7 +52,7 @@ export default function Home() {
   const addToRecent = (entityId: string) => {
     setRecent((prev:string[]) => {
       for (let i=0; i<prev.length; i++) {
-        if (prev[i] === entityId) {
+        if (prev[i] == entityId) {
           return prev
         }
       }

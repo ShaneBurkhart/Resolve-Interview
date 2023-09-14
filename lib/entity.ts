@@ -44,16 +44,25 @@ function buildEntity(attrRows: Array<any>, entityId: number) {
 		const key = row.display_name || row.name
 
 
-		let value = row.value || " ";
+		let value = row.value
 
 		if (row.data_type === 1) {
-			value = value === 1 ? "True" : "False";
-		}
-		if (typeof value === "number" && row.display_precision) {
-			value = value.toFixed(row.display_precision);
-		}
-		if (value !== " " && row.data_type_context) {
+			// boolean
+			value = value === 1 ? "Yes" : "No";
+		} else if (row.data_type === 2) {
+			// integer
+			value = parseInt(value);
+		} else if (row.data_type === 3) {
+			// decimal with/without units
+			value = parseFloat((parseFloat(value) || 0).toFixed(row.display_precision || 12)).toString();
 			value = `${value} ${row.data_type_context}`;
+		} else if (row.data_type === 11) {
+			// referenced entityId
+			throw new Error('TODO: referenced entityId');
+		} else if (row.data_type === 20) {
+			value = value.trim();
+		} else {
+			value = " "
 		}
 
 		entity.properties[category][key] = value

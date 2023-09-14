@@ -40,7 +40,7 @@ download:
 	docker-compose run --rm next wget -O ./data/props.db https://resolve-dev-public.s3.amazonaws.com/sample-data/interview/props.db 
 
 prod:
-	docker-compose -f docker-compose.prod.yaml up -d --build
+	docker-compose -p prod -f docker-compose.prod.yaml up -d --build
 
 prod_logs:
-	docker-compose -f docker-compose.prod.yaml logs
+	docker-compose -p prod -f docker-compose.prod.yaml logs
