@@ -20,7 +20,7 @@ const loadEntity = async (entityId: string) => {
 export default function Home() {
   const [isDownloading, setIsDownloading] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [message, setMessage] = useState(null)
+  const [message, setMessage] = useState<string | null>(null)
   const [entity, setEntity] = useState<any>(null)
   const [input, setInput] = useState('')
   const [recent, setRecent] = useState<string[]>([]);
