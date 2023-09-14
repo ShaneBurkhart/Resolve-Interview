@@ -10,9 +10,9 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) {
+
 	// check for the database
 	// if it doesn't exist, return a status saying we are downloading
-
 	const dbExists = await checkForDB();
 	if (!dbExists) {
 		downloadDBAsync();
@@ -20,10 +20,18 @@ export default async function handler(
 	}
 
 
-	const entityId: string = req.query.entityId as string;
+	const entityId:number = parseInt(req.query.entityId as string)
 
   const db: Database = await openDB();
-	const entity = await getEntityProperties(db, entityId);
 
-	res.status(200).json({ entity })
+	try {
+		const entity = await getEntityProperties(db, entityId);
+		res.status(200).json({ entity })
+	} catch (e: any) {
+		if (e.message === 'No attributes found for entity') {
+			return res.status(404).json({ error: e.message });
+		}
+
+		return res.status(500).json({ error: e.message });
+	}
 }

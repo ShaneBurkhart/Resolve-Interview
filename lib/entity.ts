@@ -12,9 +12,11 @@ import { query } from '@/lib/db'
 function buildEntity(attrRows: Array<any>) {
 	if (attrRows.length === 0) throw new Error('No attributes found for entity');
 
-	const entity = {
+	const entity: any = {
 		entityId: attrRows[0].entity_id,
 		name: null,
+		parent: null,
+		children: [],
 		properties: {},
 	}
 
@@ -27,11 +29,34 @@ function buildEntity(attrRows: Array<any>) {
 			continue;
 		}
 
+		if (category === '__parent__') {
+			entity.parent = row.value;
+			continue;
+		}
+
+		if (category === '__child__') {
+			entity.children.push(row.value);
+			continue;
+		}
+
 		if (!entity.properties[category]) entity.properties[category] = {};
-		console.log(row);
 
 		const key = row.display_name || row.name
-		entity.properties[category][key] = row.value || " "
+
+
+		let value = row.value || " ";
+
+		if (row.data_type === 1) {
+			value = value === 1 ? "True" : "False";
+		}
+		if (typeof value === "number" && row.display_precision) {
+			value = value.toFixed(row.display_precision);
+		}
+		if (value !== " " && row.data_type_context) {
+			value = `${value} ${row.data_type_context}`;
+		}
+
+		entity.properties[category][key] = value
 	}
 
 	return entity
@@ -47,10 +72,10 @@ export async function getEntityProperties(db: Database, entityId: number) {
 		AND (
 			_objects_attr.category NOT LIKE '\\_\\_%' ESCAPE '\\'
 			OR _objects_attr.category = '__name__'
+			OR _objects_attr.category = '__child__'
+			OR _objects_attr.category = '__parent__'
 		)
 	`;
 	const result = await query(db, q, [entityId]);
-	// todo: handle the no values case
-
 	return buildEntity(result);
 }

@@ -1,22 +1,23 @@
 - [x] create the dockerfile, next.js, tailwind
 - [x] download sqlite file and successfully create a client
-- [] create the api endpoint that takes entity_id
-	- [] create a check to download the database file if it doesn't exist
-	- [] create a query to get entity 
-	- [] paginate query if needed
-	- [] figure out the types that are possible for val
-- [] add param for pagination
-- [] create the frontend
-- [] use css perspective to create a 3d mock view
+- [x] create the api endpoint that takes entity_id
+	- [x] create a check to download the database file if it doesn't exist
+	- [x] create a delete db button for quick testing
+	- [x] create a query to get an entity 
+	- [x] paginate query if needed (not needed)
+	- [x] figure out the types that are possible for val
+- [x] create the frontend
+	- [x] style the page
 
 
-- [] go through the requirements thoroughly and add missing todos
-- [] consider what needs tested
-- [] create a punch list for the final demo
+- [x] go through the requirements thoroughly and add missing todos
+- [x] consider what needs tested
+- [x] create a punch list for the final demo
 
+- [x] how to run locally and how to run in prod
+- [x] format output 
+- [x] add parent and child 
+- [x] press enter to submit
 
-
-when we submit a request, we want to check if the db exists
-- if it doesn't, then we return a response saying we are downloading
-	- poll for the status of the database, then resubmit the request
-- if it does, then we return the entity values
+- [] make a video
+- [] make code public

@@ -1,1 +1,7 @@
-- [] running 'make' will start the app
+- [] running 'make boot' will start the app for the first time in dev
+- [] delete db button 
+- [] download shows downloading status and polls
+- [] 404 entity, no entity
+- [] parent, child entities
+- [] table expand and collapse
+- [] data formats

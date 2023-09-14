@@ -3,9 +3,6 @@ import { getEntityProperties } from './entity';
 
 const ENTITY_ID = 7600;
 
-
-// todo: it appears that some attributes are missing for 7600 that have blank values
-
 test('entity query returns the correct properties', async () => {
 	const db = await openDB();
 
@@ -24,7 +21,7 @@ test('what are the value types?', async () => {
 	// [
 	// 	{ data_type: 20 }, 		// string, display and value are there
 	// 	{ data_type: 11 }, 		// this might have something to do with the rows and cols table (no display_name)
-	// 	{ data_type: 1 }, 		// this might be a number
+	// 	{ data_type: 1 }, 		// it's a boolean
 	// 	{ data_type: 2 },			// this is a large negative number, no display name
 	// 	{ data_type: 3 } .   	// this appears to be a number, possibly text, it has a unit
 	// ]
@@ -38,5 +35,4 @@ test('what are the value types?', async () => {
 		JOIN _objects_attr ON _objects_eav.attribute_id = _objects_attr.id
 		JOIN _objects_val ON _objects_eav.value_id = _objects_val.id
 	`, []);
-	// console.log(results);
 })
