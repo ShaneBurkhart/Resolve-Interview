@@ -2,6 +2,8 @@
 - [] delete db button 
 - [] download shows downloading status and polls
 - [] 404 entity, no entity
+- [] cache entities on client
+- [] formatted output
 - [] parent, child entities
 - [] table expand and collapse
 - [] data formats
