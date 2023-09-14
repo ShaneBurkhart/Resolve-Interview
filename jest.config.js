@@ -1,8 +1,8 @@
 module.exports = {
-  transform: {
-    '^.+\\.tsx?$': 'babel-jest',
-  },
+  preset: 'ts-jest',
+  testEnvironment: 'node',
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
   },
+  extensionsToTreatAsEsm: ['.ts'],
 };

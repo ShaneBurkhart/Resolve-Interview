@@ -1,5 +1,5 @@
 import { openDB, query } from './db';
-import { getEntityProperties } from './entity';
+import { getEntityProperties, getEntityParentIDs, getEntityInstancesOf } from './entity';
 
 const ENTITY_ID = 7600;
 
@@ -12,6 +12,24 @@ test('entity query returns the correct properties', async () => {
 	expect(result.name).toBe('Transformer1 [338678]')
 	expect(result.properties).toBeDefined();
 	expect(Object.keys(result.properties).length).toBeGreaterThan(0);
+})
+
+test('get parent IDs of entity', async () => {
+	const db = await openDB();
+
+	const parents = await getEntityParentIDs(db, ENTITY_ID);
+
+	expect(parents).toBeDefined();
+	expect(parents.length).toBe(4);
+})
+
+test('get intance of IDs of entity', async () => {
+	const db = await openDB();
+
+	const instancesOf = await getEntityInstancesOf(db, ENTITY_ID);
+
+	expect(instancesOf).toBeDefined();
+	expect(instancesOf.length).toBe(1);
 })
 
 test('what are the value types?', async () => {

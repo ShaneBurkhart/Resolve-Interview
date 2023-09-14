@@ -9,11 +9,11 @@ import { query } from '@/lib/db'
 // _objects_val - val = value - this is the value for the attribute, types are on attr
 
 
-function buildEntity(attrRows: Array<any>) {
+function buildEntity(attrRows: Array<any>, entityId: number) {
 	if (attrRows.length === 0) throw new Error('No attributes found for entity');
 
 	const entity: any = {
-		entityId: attrRows[0].entity_id,
+		entityId,
 		name: null,
 		parent: null,
 		children: [],
@@ -25,17 +25,17 @@ function buildEntity(attrRows: Array<any>) {
 
 		// save the name if we see it
 		if (category === '__name__') {
-			entity.name = row.value;
+			if (row.entity_id === entityId) entity.name = row.value;
 			continue;
 		}
 
 		if (category === '__parent__') {
-			entity.parent = row.value;
+			if (row.entity_id === entityId) entity.parent = row.value;
 			continue;
 		}
 
 		if (category === '__child__') {
-			entity.children.push(row.value);
+			if (row.entity_id === entityId) entity.children.push(row.value);
 			continue;
 		}
 
@@ -63,13 +63,18 @@ function buildEntity(attrRows: Array<any>) {
 }
 
 export async function getEntityProperties(db: Database, entityId: number) {
+	const parents = await getEntityParentIDs(db, entityId);
+	const instanceOf = await getEntityInstancesOf(db, entityId);
 	const q = `
 		SELECT *
 		FROM _objects_eav
 		JOIN _objects_attr ON _objects_eav.attribute_id = _objects_attr.id
 		JOIN _objects_val ON _objects_eav.value_id = _objects_val.id
-		WHERE _objects_eav.entity_id = ?
-		AND (
+		WHERE (
+			_objects_eav.entity_id = ?
+			OR _objects_eav.entity_id IN (${parents.join(',')})
+			OR _objects_eav.entity_id IN (${instanceOf.join(',')})
+		) AND (
 			_objects_attr.category NOT LIKE '\\_\\_%' ESCAPE '\\'
 			OR _objects_attr.category = '__name__'
 			OR _objects_attr.category = '__child__'
@@ -77,5 +82,50 @@ export async function getEntityProperties(db: Database, entityId: number) {
 		)
 	`;
 	const result = await query(db, q, [entityId]);
-	return buildEntity(result);
+	return buildEntity(result, entityId);
+}
+
+export async function getEntityParentIDs(db: Database, entityId: number) {
+	const parents: Array<number> = [];
+	const q = `
+		SELECT *
+		FROM _objects_eav
+		JOIN _objects_attr ON _objects_eav.attribute_id = _objects_attr.id
+		JOIN _objects_val ON _objects_eav.value_id = _objects_val.id
+		WHERE _objects_eav.entity_id = ?
+		AND _objects_attr.category = '__parent__'
+	`;
+	let eid = entityId;
+	let result = await query(db, q, [eid]);
+	while (result.length > 0) {
+		parents.push(result[0].value);
+		eid = result[0].value;
+
+		result = await query(db, q, [eid]);
+	}
+
+	return parents
+}
+
+export async function getEntityInstancesOf(db: Database, entityId: number) {
+	const instancesOf: Array<number> = [];
+	const q = `
+		SELECT *
+		FROM _objects_eav
+		JOIN _objects_attr ON _objects_eav.attribute_id = _objects_attr.id
+		JOIN _objects_val ON _objects_eav.value_id = _objects_val.id
+		WHERE _objects_eav.entity_id = ?
+		AND _objects_attr.category = '__instanceof__'
+	`;
+
+	let eid = entityId;
+	let result = await query(db, q, [entityId]);
+	while (result.length > 0) {
+		instancesOf.push(result[0].value);
+		eid = result[0].value;
+
+		result = await query(db, q, [eid]);
+	}
+
+	return instancesOf
 }
